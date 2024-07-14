@@ -1,0 +1,31 @@
+name: cargo fmt, clippy and test on PR
+
+on:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: check fmt and clippy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+      - name: Use the rust-toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Check fmt
+        uses: actions-rust-lang/rustfmt@v1
+      - name: Check clippy
+        run: cargo clippy
+  test:
+    name: cargo test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+      - name: Use the rust-toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: cargo test
+        run: cargo test --all-features
