@@ -1,11 +1,13 @@
 use std::time::Duration;
 
 use bevy::{math::bounding::Aabb2d, prelude::*};
+use bevy_embedded_assets::EmbeddedAssetPlugin;
 use rand::Rng;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugins(EmbeddedAssetPlugin::default())
         .add_systems(Startup, setup)
         .add_systems(Update, (swim, move_algae))
         .insert_resource(ChangeObjectiveTimer(Timer::from_seconds(
@@ -43,7 +45,7 @@ fn setup(
         );
         commands.spawn((
             SpriteBundle {
-                texture: asset_server.load("fish-forage/fish-sardine.png"),
+                texture: asset_server.load("embedded://fish-forage/fish-sardine.png"),
                 transform: Transform::from_scale(Vec3::splat(2.)),
                 ..default()
             },
@@ -57,7 +59,7 @@ fn setup(
 
     commands.spawn((
         SpriteBundle {
-            texture: asset_server.load("fish-forage/algae.png"),
+            texture: asset_server.load("embedded://fish-forage/algae.png"),
             transform: Transform::from_scale(Vec3::splat(2.)),
             ..default()
         },
@@ -94,10 +96,10 @@ fn swim(
 
         transform.translation = Vec3::new(swimmer.position.x, swimmer.position.y, 0.);
 
-        println!(
-            "position: {:?}, velocity: {:?}",
-            swimmer.position, swimmer.velocity
-        );
+        // println!(
+        //     "position: {:?}, velocity: {:?}",
+        //     swimmer.position, swimmer.velocity
+        // );
     }
 }
 
