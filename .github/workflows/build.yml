@@ -23,6 +23,9 @@ jobs:
       - name: Install just
         uses: extractions/setup-just@v1
       - run: echo "WORKING_DIR=$(basename $(pwd))" >> $GITHUB_ENV
+      - name: Install Dependencies
+        if: ${{ matrix.os }} == 'ubuntu-latest'
+        run: sudo apt-get install g++ pkg-config libx11-dev libasound2-dev libudev-dev libxkbcommon-x11-0
       - name: Build
         shell: bash
         run: |
