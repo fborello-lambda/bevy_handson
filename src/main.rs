@@ -1,5 +1,5 @@
 use rand::Rng;
-use bevy::{math::{bounding::Aabb2d, VectorSpace}, prelude::*};
+use bevy::{math::bounding::Aabb2d, prelude::*};
 
 fn main() {
     App::new()
