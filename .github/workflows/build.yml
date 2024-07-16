@@ -1,0 +1,38 @@
+name: Build Rust Project
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-upload:
+    name: Build and upload
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+      - name: Use the rust-toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Install just
+        uses: extractions/setup-just@v1
+      - run: echo "WORKING_DIR=$(basename $(pwd))" >> $GITHUB_ENV
+      - name: Install Dependencies
+        if: ${{ matrix.os }} == 'ubuntu-latest'
+        run: sudo apt-get install g++ pkg-config libx11-dev libasound2-dev libudev-dev libxkbcommon-x11-0
+      - name: Build
+        shell: bash
+        run: |
+          just build-release
+          echo "${{ env.WORKING_DIR }}"
+          mv "target/release/${{ env.WORKING_DIR }}" "${{ matrix.os }}.bin"
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.os }}.bin
