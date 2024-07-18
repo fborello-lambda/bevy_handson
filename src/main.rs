@@ -1,16 +1,18 @@
 use bevy::prelude::*;
+use bevy_embedded_assets::*;
 
+mod algae;
 mod components;
 mod fish;
-mod algae;
 mod resources;
-use resources::*;
 use algae::*;
 use fish::*;
+use resources::*;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugins(EmbeddedAssetPlugin::default())
         .add_systems(Startup, camera_setup)
         .add_plugins(FishPlugin)
         .add_plugins(AlgaePlugin)
